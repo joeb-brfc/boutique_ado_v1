@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +38,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
 ]
 
 MIDDLEWARE = [
@@ -59,13 +64,33 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request',
+                'django.template.context_processors.request', #required by allauth
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
         },
     },
 ]
+
+AUTHENTICATION_BACKENDS = [
+    # Needed to login by username in Django admin, regardless of `allauth`
+    'django.contrib.auth.backends.ModelBackend',
+
+    # `allauth` specific authentication methods, such as login by email
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SITE_ID = 1
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' #added for allauth
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email' #added for allauth
+ACCOUNT_EMAIL_REQUIRED = True #added for allauth
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory' #added for allauth
+ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True #added for allauth
+ACCOUNT_USERNAME_MIN_LENGTH = 4 #added for allauth
+LOGIN_URL = 'account_login' #added for allauth
+LOGIN_REDIRECT_URL = '/' #added for allauth
 
 WSGI_APPLICATION = 'boutique_ado.wsgi.application'
 
